@@ -1,0 +1,38 @@
+version: "3.5"
+services:
+  pg_master:
+    #build: ./master
+    image: pg_db_pg_master
+    ports:
+      - 5432:5432
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=hamed
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=hamed
+      - PG_REP_USER=rep
+      - PG_REP_PASSWORD=123456
+    networks:
+      - pg_cluster
+
+  pg_slave:
+    #build: ./slave
+    image: pg_db_pg_slave
+    ports:
+      - 5433:5432
+    environment:
+       - POSTGRES_USER=hamed
+       - POSTGRES_PASSWORD=123456
+       - POSTGRES_DB=hamed
+       - PG_REP_USER=rep
+       - PG_REP_PASSWORD=123456
+    networks:
+      - pg_cluster
+
+
+networks:
+  pg_cluster:
+    
+volumes:
+  pg_data:
